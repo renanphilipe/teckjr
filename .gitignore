@@ -1,0 +1,7 @@
+node_modules
+.next
+.vercel
+.env*
+*.pem
+npm-debug.log*
+.DS_Store
