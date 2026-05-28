@@ -1,34 +1,44 @@
+import { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import Link from 'next/link'
+import { getContent, trackView } from '../lib/store'
 
 const pages = [
-  { href: '/hardware',   label: 'Hardware',    icon: '🖥️', desc: 'Aulas e materiais de hardware' },
-  { href: '/software',   label: 'Software',    icon: '💾', desc: 'Materiais, ferramentas e aulas' },
-  { href: '/promo',      label: 'Promo',       icon: '🏷️', desc: 'Promoções Shopee para montagem' },
-  { href: '/fornecedor', label: 'Fornecedor',  icon: '🔗', desc: 'Contatos de fornecedores' },
+  { href:'/hardware',   label:'Hardware',   icon:'🖥️' },
+  { href:'/software',   label:'Software',   icon:'💾' },
+  { href:'/promo',      label:'Promo',      icon:'🏷️' },
+  { href:'/fornecedor', label:'Fornecedor', icon:'🔗' },
+  { href:'/qrcode',     label:'QR Code',    icon:'📱' },
 ]
 
 export default function Home() {
+  const [welcomeImg, setWelcomeImg] = useState(null)
+  const [qrUrl, setQrUrl]           = useState(null)
+
+  useEffect(() => {
+    const c = getContent()
+    setWelcomeImg(c.welcomeImage)
+    setQrUrl(c.qrUrl)
+    trackView('home')
+  }, [])
+
   return (
     <Layout title="TeckJR" desc="Hardware, Software, Promoções e Fornecedores.">
-
-      {/* HERO */}
       <section style={{ position:'relative', minHeight:'calc(100vh - 64px)', display:'flex', alignItems:'center', overflow:'hidden' }}>
 
-        {/* BG glows */}
+        {/* BG */}
         <div aria-hidden style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
           <div style={{ position:'absolute', width:500, height:500, right:-80, top:-80,
-            borderRadius:'50%', background:'radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 70%)', filter:'blur(60px)' }} />
+            borderRadius:'50%', background:'radial-gradient(circle,rgba(0,229,255,0.07) 0%,transparent 70%)', filter:'blur(60px)' }}/>
           <div style={{ position:'absolute', width:350, height:350, left:'35%', bottom:0,
-            borderRadius:'50%', background:'radial-gradient(circle, rgba(124,92,191,0.09) 0%, transparent 70%)', filter:'blur(80px)' }} />
-          {/* grid */}
+            borderRadius:'50%', background:'radial-gradient(circle,rgba(124,92,191,0.09) 0%,transparent 70%)', filter:'blur(80px)' }}/>
           <div style={{
             position:'absolute', inset:0,
-            backgroundImage:'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
+            backgroundImage:'linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px)',
             backgroundSize:'56px 56px',
-            WebkitMaskImage:'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
-            maskImage:'radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%)',
-          }} />
+            WebkitMaskImage:'radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)',
+            maskImage:'radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)',
+          }}/>
         </div>
 
         <div className="wrap" style={{ position:'relative', zIndex:2, paddingTop:80, paddingBottom:80 }}>
@@ -36,7 +46,7 @@ export default function Home() {
           {/* Badge */}
           <div style={{
             display:'inline-flex', alignItems:'center', gap:8,
-            fontFamily:'var(--mono)', fontSize:'0.72rem', fontWeight:700,
+            fontFamily:'var(--mono)', fontSize:'0.72rem', fontWeight:500,
             letterSpacing:'0.12em', textTransform:'uppercase',
             color:'var(--accent)', padding:'7px 14px',
             border:'1px solid rgba(0,229,255,0.22)', borderRadius:100,
@@ -44,41 +54,63 @@ export default function Home() {
             animation:'fadeUp .5s ease both',
           }}>
             <span style={{ width:7, height:7, borderRadius:'50%', background:'var(--accent)',
-              boxShadow:'0 0 8px var(--accent)', animation:'pulse 2s ease infinite' }} />
+              boxShadow:'0 0 8px var(--accent)', animation:'pulse 2s ease infinite' }}/>
             Blog de Tecnologia
           </div>
 
           {/* Title */}
           <h1 style={{
-            fontSize:'clamp(2.6rem, 7vw, 5rem)', fontWeight:800,
-            letterSpacing:'-0.045em', lineHeight:1.0,
+            fontSize:'clamp(2.6rem,7vw,5rem)', fontWeight:900,
+            letterSpacing:'-0.04em', lineHeight:1.0,
             animation:'fadeUp .5s .08s ease both',
           }}>
             Bem-vindo ao<br />
             <span style={{ color:'var(--accent)' }}>TeckJR!</span>
           </h1>
 
-          {/* Welcome image */}
-          <div style={{ marginTop:32, marginBottom:8, animation:'fadeUp .5s .16s ease both' }}>
-            <img
-              src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKo60pNyouIJLJ69CWLPEZvysJJVevniWgDXQMcX-dfOSlpW-yS9pALd7syrSemtId04junoXJ11hmixl79Tdno7CPdaWFo6SuZlW0g5AXBGqP1Gmsvfht5dEARbkBUK9JA0dWkDYRo7V9LhYKy86_j4uYpvHmDorDhkKXnuN6d3dV_k51fL_HdQF-Fh0/s1350/Bem%20Vindos.png"
-              alt="Bem Vindos ao TeckJR"
-              style={{ borderRadius:'var(--r2)', maxWidth:480, width:'100%', border:'1px solid var(--border)' }}
-            />
-          </div>
+          {/* Image + QR side by side */}
+          {welcomeImg && (
+            <div style={{
+              display:'flex', gap:16, alignItems:'stretch',
+              marginTop:32, marginBottom:8,
+              animation:'fadeUp .5s .16s ease both',
+              flexWrap:'wrap',
+            }}>
+              <img
+                src={welcomeImg}
+                alt="Bem Vindos ao TeckJR"
+                style={{ borderRadius:'var(--r2)', width:'clamp(220px,45vw,420px)',
+                  objectFit:'cover', border:'1px solid var(--border)', flexShrink:0 }}
+              />
+              {qrUrl && (
+                <a href={qrUrl} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+                    gap:10, padding:16,
+                    background:'var(--surface)', border:'1px solid var(--border)',
+                    borderRadius:'var(--r2)', flexShrink:0,
+                    width:'clamp(220px,45vw,420px)',
+                    transition:'border-color var(--ease)',
+                  }} className="qr-box">
+                  <img src="/qrcode.png" alt="QR Code TeckJR"
+                    style={{ width:'100%', maxWidth:380, borderRadius:8, imageRendering:'pixelated' }}/>
+                  <span style={{ fontSize:'0.75rem', fontFamily:'var(--mono)', color:'var(--text3)', letterSpacing:'0.06em' }}>
+                    teckjr.vercel.app
+                  </span>
+                </a>
+              )}
+            </div>
+          )}
 
           {/* Nav buttons */}
-          <div style={{
-            display:'flex', gap:12, flexWrap:'wrap', marginTop:36,
-            animation:'fadeUp .5s .24s ease both',
-          }}>
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginTop:32, animation:'fadeUp .5s .24s ease both' }}>
             {pages.map(p => (
               <Link key={p.href} href={p.href} style={{
                 display:'inline-flex', alignItems:'center', gap:8,
-                padding:'11px 22px',
+                padding:'10px 20px',
                 background:'var(--surface)', border:'1px solid var(--border)',
                 color:'var(--text)', borderRadius:'var(--r)',
-                fontWeight:600, fontSize:'0.9rem',
+                fontWeight:600, fontSize:'0.88rem',
                 transition:'border-color var(--ease), background var(--ease), color var(--ease)',
               }} className="hero-btn">
                 <span>{p.icon}</span> {p.label}
@@ -88,12 +120,12 @@ export default function Home() {
         </div>
 
         <style>{`
-          @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-          @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+          @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+          @keyframes pulse  { 0%,100%{opacity:1} 50%{opacity:.3} }
           .hero-btn:hover { border-color:rgba(0,229,255,.35) !important; color:var(--accent) !important; background:var(--surface2) !important; }
+          .qr-box:hover { border-color:rgba(0,229,255,.4) !important; }
         `}</style>
       </section>
-
     </Layout>
   )
 }

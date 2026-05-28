@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#0b0b10"/>
+  <rect x="1" y="1" width="30" height="30" rx="6" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+  <text x="5" y="23" font-family="Arial Black,sans-serif" font-weight="900" font-size="15" fill="#00e5ff">T</text>
+  <text x="14" y="23" font-family="Arial Black,sans-serif" font-weight="900" font-size="12" fill="#eaeaf2">JR</text>
+</svg>
