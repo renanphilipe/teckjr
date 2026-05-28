@@ -16,10 +16,11 @@ export default function Home() {
   const [qrUrl, setQrUrl]           = useState(null)
 
   useEffect(() => {
-    const c = getContent()
-    setWelcomeImg(c.welcomeImage)
-    setQrUrl(c.qrUrl)
     trackView('home')
+    getContent().then(c => {
+      setWelcomeImg(c.welcomeImage)
+      setQrUrl(c.qrUrl)
+    })
   }, [])
 
   return (
@@ -43,7 +44,6 @@ export default function Home() {
 
         <div className="wrap" style={{ position:'relative', zIndex:2, paddingTop:80, paddingBottom:80 }}>
 
-          {/* Badge */}
           <div style={{
             display:'inline-flex', alignItems:'center', gap:8,
             fontFamily:'var(--mono)', fontSize:'0.72rem', fontWeight:500,
@@ -58,40 +58,28 @@ export default function Home() {
             Blog de Tecnologia
           </div>
 
-          {/* Title */}
-          <h1 style={{
-            fontSize:'clamp(2.6rem,7vw,5rem)', fontWeight:900,
-            letterSpacing:'-0.04em', lineHeight:1.0,
-            animation:'fadeUp .5s .08s ease both',
-          }}>
+          <h1 style={{ fontSize:'clamp(2.6rem,7vw,5rem)', fontWeight:900,
+            letterSpacing:'-0.04em', lineHeight:1.0, animation:'fadeUp .5s .08s ease both' }}>
             Bem-vindo ao<br />
             <span style={{ color:'var(--accent)' }}>TeckJR!</span>
           </h1>
 
           {/* Image + QR side by side */}
           {welcomeImg && (
-            <div style={{
-              display:'flex', gap:16, alignItems:'stretch',
-              marginTop:32, marginBottom:8,
-              animation:'fadeUp .5s .16s ease both',
-              flexWrap:'wrap',
-            }}>
-              <img
-                src={welcomeImg}
-                alt="Bem Vindos ao TeckJR"
+            <div style={{ display:'flex', gap:16, alignItems:'stretch', marginTop:32, marginBottom:8,
+              animation:'fadeUp .5s .16s ease both', flexWrap:'wrap' }}>
+              <img src={welcomeImg} alt="Bem Vindos ao TeckJR"
                 style={{ borderRadius:'var(--r2)', width:'clamp(220px,45vw,420px)',
-                  objectFit:'cover', border:'1px solid var(--border)', flexShrink:0 }}
-              />
+                  objectFit:'cover', border:'1px solid var(--border)', flexShrink:0 }} />
               {qrUrl && (
-                <a href={qrUrl} target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
-                    gap:10, padding:16,
-                    background:'var(--surface)', border:'1px solid var(--border)',
-                    borderRadius:'var(--r2)', flexShrink:0,
-                    width:'clamp(220px,45vw,420px)',
-                    transition:'border-color var(--ease)',
-                  }} className="qr-box">
+                <a href={qrUrl} target="_blank" rel="noopener noreferrer" style={{
+                  display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+                  gap:10, padding:16,
+                  background:'var(--surface)', border:'1px solid var(--border)',
+                  borderRadius:'var(--r2)', flexShrink:0,
+                  width:'clamp(220px,45vw,420px)',
+                  transition:'border-color var(--ease)',
+                }} className="qr-box">
                   <img src="/qrcode.png" alt="QR Code TeckJR"
                     style={{ width:'100%', maxWidth:380, borderRadius:8, imageRendering:'pixelated' }}/>
                   <span style={{ fontSize:'0.75rem', fontFamily:'var(--mono)', color:'var(--text3)', letterSpacing:'0.06em' }}>
@@ -102,7 +90,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Nav buttons */}
           <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginTop:32, animation:'fadeUp .5s .24s ease both' }}>
             {pages.map(p => (
               <Link key={p.href} href={p.href} style={{

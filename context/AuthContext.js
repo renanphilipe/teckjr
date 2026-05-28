@@ -10,21 +10,19 @@ export function AuthProvider({ children }) {
   const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    try {
-      const s = localStorage.getItem('teckjr_admin')
-      if (s === 'true') setIsAdmin(true)
-    } catch {}
+    try { if (localStorage.getItem('teckjr_admin') === 'true') setIsAdmin(true) } catch {}
     setChecked(true)
   }, [])
 
   function login(user, pass) {
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
       setIsAdmin(true)
-      localStorage.setItem('teckjr_admin', 'true')
-      // record login
-      const logs = JSON.parse(localStorage.getItem('teckjr_logins') || '[]')
-      logs.unshift({ at: new Date().toISOString() })
-      localStorage.setItem('teckjr_logins', JSON.stringify(logs.slice(0, 50)))
+      try {
+        localStorage.setItem('teckjr_admin', 'true')
+        const logs = JSON.parse(localStorage.getItem('teckjr_logins') || '[]')
+        logs.unshift({ at: new Date().toISOString() })
+        localStorage.setItem('teckjr_logins', JSON.stringify(logs.slice(0,50)))
+      } catch {}
       return true
     }
     return false
@@ -32,7 +30,7 @@ export function AuthProvider({ children }) {
 
   function logout() {
     setIsAdmin(false)
-    localStorage.removeItem('teckjr_admin')
+    try { localStorage.removeItem('teckjr_admin') } catch {}
   }
 
   return (

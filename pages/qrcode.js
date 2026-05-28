@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import { getContent, trackView } from '../lib/store'
+import { fetchContent, trackView } from '../lib/store'
 
 export default function QRCodePage() {
   const [qrUrl, setQrUrl] = useState(null)
   useEffect(() => {
-    setQrUrl(getContent().qrUrl)
+    fetchContent().then(c => setQrUrl(c.qrUrl))
     trackView('qrcode')
   }, [])
 
@@ -33,19 +33,17 @@ export default function QRCodePage() {
           {qrUrl || 'teckjr.vercel.app'}
         </p>
 
-        {qrUrl && (
-          <a href={qrUrl} target="_blank" rel="noopener noreferrer" style={{
-            display:'block', padding:24,
-            background:'var(--surface)', border:'2px solid var(--border)',
-            borderRadius:24, transition:'border-color var(--ease), box-shadow var(--ease)',
-          }} className="qr-card">
-            <img
-              src="/qrcode.png"
-              alt="QR Code TeckJR"
-              style={{ width:'min(380px, 80vw)', height:'min(380px, 80vw)', imageRendering:'pixelated', borderRadius:8 }}
-            />
-          </a>
-        )}
+        <a href={qrUrl || '#'} target="_blank" rel="noopener noreferrer" style={{
+          display:'block', padding:24,
+          background:'var(--surface)', border:'2px solid var(--border)',
+          borderRadius:24, transition:'border-color var(--ease), box-shadow var(--ease)',
+        }} className="qr-card">
+          <img
+            src="/qrcode.png"
+            alt="QR Code TeckJR"
+            style={{ width:'min(380px, 80vw)', height:'min(380px, 80vw)', imageRendering:'pixelated', borderRadius:8 }}
+          />
+        </a>
 
         <p style={{ marginTop:24, color:'var(--text3)', fontSize:'0.8rem', fontFamily:'var(--mono)' }}>
           Clique para acessar o site

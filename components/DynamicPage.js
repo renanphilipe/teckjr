@@ -5,14 +5,31 @@ import { PageHero, Section, ResourceGroup } from './ui'
 
 export default function DynamicPage({ pageKey }) {
   const [page, setPage] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const content = getContent()
-    setPage(content.pages[pageKey])
     trackView(pageKey)
+    getContent().then(content => {
+      setPage(content.pages[pageKey])
+      setLoading(false)
+    })
   }, [pageKey])
 
-  if (!page) return <Layout><div style={{padding:120,textAlign:'center',color:'var(--text3)'}}>Carregando...</div></Layout>
+  if (loading) return (
+    <Layout>
+      <div style={{ padding:120, textAlign:'center', color:'var(--text3)', fontFamily:'var(--mono)', fontSize:'0.85rem' }}>
+        Carregando...
+      </div>
+    </Layout>
+  )
+
+  if (!page) return (
+    <Layout>
+      <div style={{ padding:120, textAlign:'center', color:'var(--text3)', fontFamily:'var(--mono)', fontSize:'0.85rem' }}>
+        Página não encontrada.
+      </div>
+    </Layout>
+  )
 
   return (
     <Layout title={page.title} desc={page.desc}>
