@@ -1,8 +1,7 @@
 import { getSupabase } from '../../lib/supabase'
 import { DEFAULT_CONTENT } from '../../lib/store'
 
-// Since Vercel free plan has no env vars, admin secret is checked here.
-// This is a server-side route — not exposed in client bundle.
+// v5 — secret hardcoded server-side, not in client bundle
 const ADMIN_SECRET = 'marciocavjr@2026'
 
 export default async function handler(req, res) {
