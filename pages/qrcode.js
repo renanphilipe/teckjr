@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import { fetchContent, trackView } from '../lib/store'
+import { getContent, trackView } from '../lib/store'
 
 export default function QRCodePage() {
   const [qrUrl, setQrUrl] = useState(null)
   useEffect(() => {
-    fetchContent().then(c => setQrUrl(c.qrUrl))
+    getContent().then(c => setQrUrl(c.qrUrl))
     trackView('qrcode')
   }, [])
 
