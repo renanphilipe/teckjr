@@ -142,7 +142,7 @@ function Footer() {
       </div>
       <div style={{ borderTop:'1px solid var(--border)', padding:'14px 0', textAlign:'center' }}>
         <span style={{ fontSize:'0.74rem', color:'var(--text3)', fontFamily:'var(--mono)' }}>
-          © {new Date().getFullYear()} TeckJR — Todos os direitos reservados a Marcio Cavalcante Júnior (MarcioCavJR)
+          © {new Date().getFullYear()} TeckJR — Todos os direitos reservados a Marcio Cavalcante Júnior (MarcioCavJR) - Com admiração e dedicação (RPMN)
         </span>
       </div>
       <style>{`.flink:hover { color:var(--accent) !important; }`}</style>
