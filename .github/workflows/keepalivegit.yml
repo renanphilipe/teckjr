@@ -1,0 +1,24 @@
+name: Repository Keepalive
+
+on:
+  schedule:
+    - cron: '0 0 */30 * *'   # a cada 30 dias
+  workflow_dispatch:
+
+permissions:
+  contents: write             # necessário para fazer commit
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create empty commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: keepalive [skip ci]"
+          git push
